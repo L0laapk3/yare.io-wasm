@@ -39,6 +39,8 @@ function bot() {
 				hp: (index) => memory.spirits[index].hp,
 
 				energize: (fromIndex, toIndex) => memory.spirits[fromIndex].energize(spirits[toIndex]),
+				energizeBase: (index) => memory.spirits[index].energize(memory.base),
+				energizeEnemyBase: (index) => memory.spirits[index].energize(memory.enemy_base),
 				move: (index, x, y) => memory.spirits[index].move([x, y]),
 				merge: (fromIndex, toIndex) => memory.spirits[fromIndex].merge(spirits[toIndex]),
 				divide: (index) => memory.spirits[index].divide(),
