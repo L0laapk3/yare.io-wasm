@@ -1,19 +1,10 @@
 
-
-const fs = require('fs');
-const minify = require('minify');
-
-
-(async function() {
-const contents = fs.readFileSync(process.argv[2], {encoding: 'base64'});
-const unique = new Date().getTime();
-const botCode = `\
 memory.spirits = Object.values(spirits);
 memory.base = base;
 memory.enemy_base = enemy_base;
 memory.stars = [ star_zxq, star_a1c ];
 
-if (memory.wasm_cache != ${unique}) {
+if (memory.wasm_cache != 1) {
 	buff = Buffer.from("${contents}", "base64");
 	
 	arr = new Uint8Array(buff.length);
@@ -61,15 +52,8 @@ if (memory.wasm_cache != ${unique}) {
 	wasm = new WebAssembly.Module(arr);
 	inst = new WebAssembly.Instance(wasm, importObject);
 	memory.wasm_tick = inst.exports.tick;
-	memory.wasm_cache = ${unique};
+	memory.wasm_cache = 1;
 	console.log("compiled new wasm script");
 }
 
 memory.wasm_tick();
-`;
-
-const botCodeMinified = await minify.js(botCode);
-fs.writeFileSync("bot.js", botCodeMinified);
-
-
-})();
