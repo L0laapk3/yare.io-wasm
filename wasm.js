@@ -19,7 +19,7 @@ function bot() {
 	memory.base = base;
 	memory.enemy_base = enemy_base;
 	memory.stars = stars;
-	memory.player_id = my_spirits[0].player_id;
+	memory.player_id = this_player_id;
 
 	if (memory.wasm_cache != "__UNIQUE__") {
 		buff = Buffer.from("__CONTENTS__", "base64");
