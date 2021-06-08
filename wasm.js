@@ -18,7 +18,8 @@ function bot() {
 	memory.spirits = Object.values(spirits);
 	memory.base = base;
 	memory.enemy_base = enemy_base;
-	memory.stars = [ star_zxq, star_a1c ];
+	memory.stars = stars;
+	memory.player_id = my_spirits[0].player_id;
 
 	if (memory.wasm_cache != "__UNIQUE__") {
 		buff = Buffer.from("__CONTENTS__", "base64");
