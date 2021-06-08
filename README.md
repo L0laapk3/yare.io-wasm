@@ -1,7 +1,7 @@
 # yare.io-wasm
 
-Tool to convert .wasm files into runnable bot scripts for https://yare.io/.  
+A tool to convert webassembly files into runnable bot scripts for https://yare.io/.  
 
-status: needs work in exposing the necessary functions to wasm.  
+status: working, is missing string implementation.
 
 example usage: `node wasm examples/simple.wasm`

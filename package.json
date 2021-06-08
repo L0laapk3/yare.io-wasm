@@ -1,0 +1,28 @@
+{
+  "name": "yare.io-wasm",
+  "version": "1.0.0",
+  "description": "A tool to convert webassembly files into runnable bot scripts for https://yare.io/.",
+  "main": "wasm.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "node wasm examples/simple.wasm"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/L0laapk3/yare.io-wasm.git"
+  },
+  "keywords": [
+    "wasm",
+    "yareio"
+  ],
+  "author": "L0laapk3",
+  "bugs": {
+    "url": "https://github.com/L0laapk3/yare.io-wasm/issues"
+  },
+  "homepage": "https://github.com/L0laapk3/yare.io-wasm#readme",
+  "dependencies": {
+    "minify": "^7.0.2"
+  }
+}
