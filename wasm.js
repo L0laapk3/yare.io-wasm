@@ -1,10 +1,13 @@
 
 
 const fs = require('fs');
+const minify = require('minify');
+
+
+(async function() {
 const contents = fs.readFileSync(process.argv[2], {encoding: 'base64'});
 const unique = new Date().getTime();
-
-fs.writeFileSync("bot.js", `\
+const botCode = `\
 memory.spirits = Object.values(spirits);
 if (memory.wasm_cache != ${unique}) {
 	buff = Buffer.from("${contents}", "base64");
@@ -39,4 +42,10 @@ if (memory.wasm_cache != ${unique}) {
 }
 
 memory.wasm_tick();
-`);
+`;
+
+const botCodeMinified = await minify.js(botCode);
+fs.writeFileSync("bot.js", botCodeMinified);
+
+
+})();
