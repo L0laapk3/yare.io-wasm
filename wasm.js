@@ -1,5 +1,6 @@
 
 
+const { memory } = require('console');
 const fs = require('fs');
 const minify = require('minify');
 
@@ -35,6 +36,7 @@ function bot() {
 				positionX: (index) => memory.spirits[index].position[0],
 				positionY: (index) => memory.spirits[index].position[1],
 				size: (index) => memory.spirits[index].size,
+				shape: (index) => memory.spirits[index].shape == "squares" ? 1 : 0,
 				energyCapacity: (index) => memory.spirits[index].energy_capacity,
 				energy: (index) => memory.spirits[index].energy,
 				hp: (index) => memory.spirits[index].hp,
