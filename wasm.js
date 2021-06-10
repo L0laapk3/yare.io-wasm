@@ -17,8 +17,7 @@ const minify = require('minify');
 
 function bot() {
 	memory.spirits = Object.values(spirits);
-	memory.base = base;
-	memory.enemy_base = enemy_base;
+	memory.bases = [ base, enemy_base ];
 	memory.stars = stars;
 	memory.player_id = this_player_id;
 
@@ -51,21 +50,14 @@ function bot() {
 				shout: (index, string) => {},
 				label: (index, string) => {},
 			},
-			base: {
-				positionX: () => memory.base.position[0],
-				positionY: () => memory.base.position[1],
-				size: () => memory.base.size,
-				energyCapacity: () => memory.base.energy_capacity,
-				energy: () => memory.base.energy,
-				hp: () => memory.base.hp,
-			},
-			enemyBase: {
-				positionX: () => memory.enemy_base.position[0],
-				positionY: () => memory.enemy_base.position[1],
-				size: () => memory.enemy_base.size,
-				energyCapacity: () => memory.enemy_base.energy_capacity,
-				energy: () => memory.enemy_base.energy,
-				hp: () => memory.enemy_base.hp,
+			bases: {
+				count: () => memory.bases.length,
+				positionX: (index) => memory.bases[index].position[0],
+				positionY: (index) => memory.bases[index].position[1],
+				size: (index) => memory.bases[index].size,
+				energyCapacity: (index) => memory.bases[index].energy_capacity,
+				energy: (index) => memory.bases[index].energy,
+				hp: (index) => memory.bases[index].hp,
 			},
 			stars: {
 				count: () => memory.stars.length,
