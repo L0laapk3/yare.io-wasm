@@ -5,12 +5,13 @@ const fs = require('fs');
 const minify = require('minify');
 
 (async function() {
-	const contents = fs.readFileSync(process.argv[2], {encoding: 'base64'});
+	const inputPath = process.argv[2];
+	const contents = fs.readFileSync(inputPath, {encoding: 'base64'});
 	const unique = new Date().getTime();
 	const botCode = bot.toString().replace(/function bot\(\) \{([\s\S]+)\}/, '$1').replace(/__UNIQUE__/g, unique).replace(/__CONTENTS__/g, contents);
 
 	const botCodeMinified = await minify.js(botCode);
-	fs.writeFileSync("bot.js", botCodeMinified);
+	fs.writeFileSync(inputPath.replace(/.wasm$/i, ".js"), botCodeMinified);
 })();
 
 
