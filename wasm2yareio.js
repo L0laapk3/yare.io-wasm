@@ -19,7 +19,7 @@ const minify = require('minify');
 function bot() {
 	memory.spirits = Object.values(spirits);
 	memory.bases = [ base, enemy_base ];
-	memory.stars = stars;
+	memory.stars = [ star_zxq, star_a1c ];
 	memory.player_id = this_player_id;
 
 	if (memory.wasm_cache != "__UNIQUE__") {
