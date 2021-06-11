@@ -10,7 +10,7 @@ const minify = require('minify');
 	const unique = new Date().getTime();
 	const botCode = bot.toString().replace(/function bot\(\) \{([\s\S]+)\}/, '$1').replace(/__UNIQUE__/g, unique).replace(/__CONTENTS__/g, contents);
 
-	const botCodeMinified = await minify.js(botCode);
+	const botCodeMinified = botCode;//await minify.js(botCode);
 	fs.writeFileSync(inputPath.replace(/.wasm$/i, ".js"), botCodeMinified);
 })();
 
@@ -45,7 +45,7 @@ function bot() {
 				isFriendly: (index) => memory.spirits[index].player_id == memory.player_id,
 				positionX: (index) => memory.spirits[index].position[0],
 				positionY: (index) => memory.spirits[index].position[1],
-				position: (index) => memory.spirits[index].position,
+				position: (index) => [ memory.sprites[index].position[0], memory.spirits[index].position[1] ],
 				size: (index) => memory.spirits[index].size,
 				shape: (index) => memory.spirits[index].shape == "squares" ? 1 : 0,
 				energyCapacity: (index) => memory.spirits[index].energy_capacity,
@@ -65,6 +65,7 @@ function bot() {
 				count: () => memory.bases.length,
 				positionX: (index) => memory.bases[index].position[0],
 				positionY: (index) => memory.bases[index].position[1],
+				position: (index) => [ memory.bases[index].position[0], memory.bases[index].position[1] ],
 				size: (index) => memory.bases[index].size,
 				energyCapacity: (index) => memory.bases[index].energy_capacity,
 				energy: (index) => memory.bases[index].energy,
@@ -74,6 +75,7 @@ function bot() {
 				count: () => memory.stars.length,
 				positionX: (index) => memory.stars[index].position[0],
 				positionY: (index) => memory.stars[index].position[1],
+				position: (index) => [ memory.stars[index].position[0], memory.stars[index].position[1] ],
 			},
 			console: {
 				log: (strPtr) => console.log(ptrToString(strPtr)),
