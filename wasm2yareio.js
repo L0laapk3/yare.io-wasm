@@ -34,7 +34,7 @@ function bot() {
 			while (true) {
 				const ch = memory.wasm_memory[ptr++];
 				if (!ch)
-					return str;
+					return decodeURIComponent(escape(str));
 				str += String.fromCharCode(ch);
 			}
 		};
