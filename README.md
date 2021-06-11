@@ -4,6 +4,6 @@ A tool to convert webassembly files into runnable bot scripts for https://yare.i
 
 status: fully working :)
 
-example usage: `node wasm examples/simple.wasm`  
+example usage: `node wasm2yareio examples/simple.wasm`  
 
 An example project using this can be found here: https://github.com/L0laapk3/yare.io-cpp
