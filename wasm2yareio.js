@@ -29,6 +29,16 @@ function bot() {
 		for (let i = 0; i < buff.length; ++i)
 			arr[i] = buff[i];
 
+		const ptrToString = ptr => {
+			let str = "";
+			while (true) {
+				const ch = memory.wasm_memory[ptr++];
+				if (!ch)
+					return str;
+				str += String.fromCharCode(ch);
+			}
+		};
+
 		importObject = {
 			spirits: {
 				count: () => memory.spirits.length,
@@ -48,8 +58,8 @@ function bot() {
 				merge: (fromIndex, toIndex) => memory.spirits[fromIndex].merge(spirits[toIndex]),
 				divide: (index) => memory.spirits[index].divide(),
 				jump: (index, x, y) => memory.spirits[index].jump([x, y]),
-				shout: (index, string) => {},
-				label: (index, string) => {},
+				shout: (index, strPtr) => {memory.spirits[index].shout(ptrToString(strPtr))},
+				// set_mark: (index, strPtr) => {memory.spirits[index].set_mark(ptrToString(strPtr))}, // this function is useless lol
 			},
 			bases: {
 				count: () => memory.bases.length,
@@ -66,13 +76,14 @@ function bot() {
 				positionY: (index) => memory.stars[index].position[1],
 			},
 			console: {
-				log: (string) => {},
+				log: (strPtr) => console.log(ptrToString(strPtr)),
 			}
 		};
 
 		wasm = new WebAssembly.Module(arr);
 		inst = new WebAssembly.Instance(wasm, importObject);
 		memory.wasm_tick = inst.exports.tick;
+		memory.wasm_memory = new Uint8Array(inst.exports.memory.buffer);
 		memory.wasm_cache = "__UNIQUE__";
 		console.log("compiled new wasm script");
 	}
