@@ -51,10 +51,10 @@ function bot() {
 				energy: (index) => memory.spirits[index].energy,
 				hp: (index) => memory.spirits[index].hp,
 
-				energize: (fromIndex, toIndex) => memory.spirits[fromIndex].energize(spirits[toIndex]),
+				energize: (fromIndex, toIndex) => memory.spirits[fromIndex].energize(memory.spirits[toIndex]),
 				energizeBase: (index, baseIndex) => memory.spirits[index].energize(memory.bases[baseIndex]),
 				move: (index, x, y) => memory.spirits[index].move([x, y]),
-				merge: (fromIndex, toIndex) => memory.spirits[fromIndex].merge(spirits[toIndex]),
+				merge: (fromIndex, toIndex) => memory.spirits[fromIndex].merge(memory.spirits[toIndex]),
 				divide: (index) => memory.spirits[index].divide(),
 				jump: (index, x, y) => memory.spirits[index].jump([x, y]),
 				shout: (index, strPtr) => {memory.spirits[index].shout(ptrToString(strPtr))},
