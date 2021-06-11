@@ -45,6 +45,7 @@ function bot() {
 				isFriendly: (index) => memory.spirits[index].player_id == memory.player_id,
 				positionX: (index) => memory.spirits[index].position[0],
 				positionY: (index) => memory.spirits[index].position[1],
+				position: (index) => memory.spirits[index].position,
 				size: (index) => memory.spirits[index].size,
 				shape: (index) => memory.spirits[index].shape == "squares" ? 1 : 0,
 				energyCapacity: (index) => memory.spirits[index].energy_capacity,
