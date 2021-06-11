@@ -10,7 +10,7 @@ const minify = require('minify');
 	const unique = new Date().getTime();
 	const botCode = bot.toString().replace(/function bot\(\) \{([\s\S]+)\}/, '$1').replace(/__UNIQUE__/g, unique).replace(/__CONTENTS__/g, contents);
 
-	const botCodeMinified = botCode;//await minify.js(botCode);
+	const botCodeMinified = await minify.js(botCode);
 	fs.writeFileSync(inputPath.replace(/.wasm$/i, ".js"), botCodeMinified);
 })();
 
