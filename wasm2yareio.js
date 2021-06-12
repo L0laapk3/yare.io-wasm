@@ -57,8 +57,10 @@ function bot() {
 
 		const ptrToString = ptr => {
 			let str = "";
-			while (true) {
-				const ch = memory.wasm_memory[ptr++];
+			const buffer = new Uint8Array(inst.exports.memory.buffer, ptr)
+			let offset = 0;
+			while(true) {
+				const ch = buffer[offset++];
 				if (!ch)
 					return decodeURIComponent(escape(str));
 				str += String.fromCharCode(ch);
@@ -112,7 +114,6 @@ function bot() {
 		wasm = new WebAssembly.Module(arr);
 		inst = new WebAssembly.Instance(wasm, importObject);
 		memory.wasm_tick = inst.exports.tick;
-		memory.wasm_memory = new Uint8Array(inst.exports.memory.buffer);
 		memory.wasm_cache = "__UNIQUE__";
 		console.log(`compiled new wasm script in ${new Date().getTime() - startCompile}ms`);
 	}
