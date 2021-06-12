@@ -23,10 +23,10 @@
 
     function checkPanel() {
         const panel = document.getElementById("panel");
-        if (!panel || !window.editor_container_el)
+        if (!panel || !window.editor_container_el || !window.update_code)
             return setTimeout(checkPanel, 50);
         panel.style.width = "20px";
-        window.editor_container_el.style.width = new_panel_width + 'px';
+        window.editor_container_el.style.width = "20px";
         window.editor.resize();
 
         setInterval(async _ => {
