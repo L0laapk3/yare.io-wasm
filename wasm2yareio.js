@@ -1,17 +1,41 @@
 
+const http = require("http");
 
 const { memory } = require('console');
-const fs = require('fs');
+const fs = require('fs').promises;
 const minify = require('minify');
 
-(async function() {
-	const inputPath = process.argv[2];
-	const contents = fs.readFileSync(inputPath, {encoding: 'base64'});
+
+const inputPath = process.argv[2];
+const gen = new Promise(async resolve => {
+	const contents = await fs.readFile(inputPath, {encoding: 'base64'});
 	const unique = new Date().getTime();
 	const botCode = bot.toString().replace(/function bot\(\) \{([\s\S]+)\}/, '$1').replace(/__UNIQUE__/g, unique).replace(/__CONTENTS__/g, contents);
-
 	const botCodeMinified = await minify.js(botCode);
-	fs.writeFileSync(inputPath.replace(/.wasm$/i, ".js"), botCodeMinified);
+	resolve(botCodeMinified)
+});
+
+
+
+let closed = false;
+const server = http.createServer(async (req, res) => {
+	res.setHeader("Access-Control-Allow-Origin", "*");
+	res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	res.setHeader("Connection", "close");
+	const botCodeMinified = await gen;
+	res.write(botCodeMinified);
+	res.end();
+}).listen(8194);
+
+const delay = new Promise(resolve => setTimeout(resolve, 1000));
+(async function() {
+	const botCodeMinified = await gen;
+
+	await fs.writeFile(inputPath.replace(/.wasm$/i, ".js"), botCodeMinified);
+
+	await delay;
+	closed = true;
+	server.close();
 })();
 
 
