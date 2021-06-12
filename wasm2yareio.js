@@ -10,9 +10,10 @@ const inputPath = process.argv[2];
 const gen = new Promise(async resolve => {
 	const contents = await fs.readFile(inputPath, {encoding: 'base64'});
 	const unique = new Date().getTime();
-	const botCode = bot.toString().replace(/function bot\(\) \{([\s\S]+)\}/, '$1').replace(/__UNIQUE__/g, unique).replace(/__CONTENTS__/g, contents);
-	const botCodeMinified = await minify.js(botCode);
-	resolve(botCodeMinified)
+	let botCode = bot.toString().replace(/function bot\(\) \{([\s\S]+)\}/, '$1').replace(/__UNIQUE__/g, unique).replace(/__CONTENTS__/g, contents);
+	botCode = await minify.js(botCode);
+	botCode = `startTime=new Date().getTime()\n${botCode}\nconsole.log(\`\${new Date().getTime()-startTime}ms\`)`;
+	resolve(botCode)
 });
 
 
@@ -22,17 +23,15 @@ const server = http.createServer(async (req, res) => {
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	res.setHeader("Connection", "close");
-	const botCodeMinified = await gen;
-	res.write(botCodeMinified);
+	const botCode = await gen;
+	res.write(botCode);
 	res.end();
 }).listen(8194);
 
 const delay = new Promise(resolve => setTimeout(resolve, 1000));
 (async function() {
-	const botCodeMinified = await gen;
-
-	await fs.writeFile(inputPath.replace(/.wasm$/i, ".js"), botCodeMinified);
-
+	const botCode = await gen;
+	await fs.writeFile(inputPath.replace(/.wasm$/i, ".js"), botCode);
 	await delay;
 	closed = true;
 	server.close();
@@ -46,6 +45,7 @@ function bot() {
 	memory.stars = [ star_zxq, star_a1c ];
 	memory.player_id = this_player_id;
 	memory.tick = (memory.tick + 1) || 0;
+
 
 	if (memory.wasm_cache != "__UNIQUE__") {
 		buff = Buffer.from("__CONTENTS__", "base64");
@@ -104,7 +104,7 @@ function bot() {
 				position: (index) => [ memory.stars[index].position[0], memory.stars[index].position[1] ],
 			},
 			console: {
-				log: (strPtr) => console.log(ptrToString(strPtr)),
+				log: (strPtr) => console.log(strPtr + " " + ptrToString(strPtr)),
 			}
 		};
 
