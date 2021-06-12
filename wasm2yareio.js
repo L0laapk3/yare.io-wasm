@@ -45,6 +45,7 @@ function bot() {
 	memory.bases = [ base, enemy_base ];
 	memory.stars = [ star_zxq, star_a1c ];
 	memory.player_id = this_player_id;
+	memory.tick = (memory.tick + 1) || 0;
 
 	if (memory.wasm_cache != "__UNIQUE__") {
 		buff = Buffer.from("__CONTENTS__", "base64");
@@ -114,5 +115,5 @@ function bot() {
 		console.log("compiled new wasm script");
 	}
 
-	memory.wasm_tick();
+	memory.wasm_tick(memory.tick);
 }
