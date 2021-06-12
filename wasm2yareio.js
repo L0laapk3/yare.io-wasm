@@ -94,6 +94,7 @@ function bot() {
 				size: (index) => memory.bases[index].size,
 				energyCapacity: (index) => memory.bases[index].energy_capacity,
 				energy: (index) => memory.bases[index].energy,
+				currentSpiritCost: (index) => memory.bases[index].current_spirit_cost,
 				hp: (index) => memory.bases[index].hp,
 			},
 			stars: {
