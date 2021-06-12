@@ -48,6 +48,7 @@ function bot() {
 
 
 	if (memory.wasm_cache != "__UNIQUE__") {
+		const startCompile = new Date().getTime();
 		buff = Buffer.from("__CONTENTS__", "base64");
 		
 		arr = new Uint8Array(buff.length);
@@ -113,7 +114,7 @@ function bot() {
 		memory.wasm_tick = inst.exports.tick;
 		memory.wasm_memory = new Uint8Array(inst.exports.memory.buffer);
 		memory.wasm_cache = "__UNIQUE__";
-		console.log("compiled new wasm script");
+		console.log(`compiled new wasm script in ${new Date().getTime() - startCompile}ms`);
 	}
 
 	memory.wasm_tick(memory.tick);
