@@ -76,6 +76,7 @@ function bot() {
 				shape: (index) => memory.spirits[index].shape == "squares" ? 1 : 0,
 				energyCapacity: (index) => memory.spirits[index].energy_capacity,
 				energy: (index) => memory.spirits[index].energy,
+				id: (index) => parseInt(memory.spirits[index].id.match(/_(\d)+$/)[1]) - 1,
 				hp: (index) => memory.spirits[index].hp,
 
 				energize: (fromIndex, toIndex) => memory.spirits[fromIndex].energize(memory.spirits[toIndex]),
