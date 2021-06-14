@@ -46,7 +46,6 @@ function bot() {
 	memory.player_id = this_player_id;
 	memory.tick = (memory.tick + 1) || 0;
 
-
 	if (memory.wasm_cache != "__UNIQUE__") {
 		const startCompile = new Date().getTime();
 		buff = Buffer.from("__CONTENTS__", "base64");
@@ -56,9 +55,10 @@ function bot() {
 			arr[i] = buff[i];
 
 		const ptrToString = ptr => {
-			let str = "";
-			while (true) {
-				const ch = memory.wasm_memory[ptr++];
+			const buffer = new Uint8Array(memory.wasm_memory.buffer, ptr);
+			let str = "", offset = 0;
+			while(true) {
+				const ch = buffer[offset++];
 				if (!ch)
 					return decodeURIComponent(escape(str));
 				str += String.fromCharCode(ch);
@@ -106,14 +106,14 @@ function bot() {
 				position: (index) => [ memory.stars[index].position[0], memory.stars[index].position[1] ],
 			},
 			console: {
-				log: (strPtr) => console.log(strPtr + " " + ptrToString(strPtr)),
+				log: (strPtr) => console.log(ptrToString(strPtr)),
 			}
 		};
 
-		wasm = new WebAssembly.Module(arr);
-		inst = new WebAssembly.Instance(wasm, importObject);
+		const wasm = new WebAssembly.Module(arr);
+		const inst = new WebAssembly.Instance(wasm, importObject);
 		memory.wasm_tick = inst.exports.tick;
-		memory.wasm_memory = new Uint8Array(inst.exports.memory.buffer);
+		memory.wasm_memory = inst.exports.memory;
 		memory.wasm_cache = "__UNIQUE__";
 		console.log(`compiled new wasm script in ${new Date().getTime() - startCompile}ms`);
 	}
