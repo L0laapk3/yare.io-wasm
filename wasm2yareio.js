@@ -137,6 +137,7 @@ function bot() {
 			},
 			players: {
 				count: () => memory.players.length,
+				me: () => memory.players.indexOf(memory.player_id),
 			},
 			console: {
 				log: (strPtr) => console.log(ptrToString(strPtr)),
