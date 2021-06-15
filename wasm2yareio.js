@@ -1,7 +1,6 @@
 
 const http = require("http");
-
-const { memory } = require('console');
+const { exec } = require("child_process");
 const fs = require('fs').promises;
 const minify = require('minify');
 
@@ -18,15 +17,21 @@ const gen = new Promise(async resolve => {
 
 
 
+let updates = 0;
 let closed = false;
-const server = http.createServer(async (req, res) => {
-	res.setHeader("Access-Control-Allow-Origin", "*");
-	res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	res.setHeader("Connection", "close");
-	const botCode = await gen;
-	res.write(botCode);
-	res.end();
-}).listen(8194);
+let server;
+const downloadedPromise = new Promise(resolve => {
+	server = http.createServer(async (req, res) => {
+		if (!updates++)
+			resolve();
+		res.setHeader("Access-Control-Allow-Origin", "*");
+		res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		res.setHeader("Connection", "close");
+		const botCode = await gen;
+		res.write(botCode);
+		res.end();
+	}).listen(8194);
+});
 
 const delay = new Promise(resolve => setTimeout(resolve, 1000));
 (async function() {
@@ -34,7 +39,13 @@ const delay = new Promise(resolve => setTimeout(resolve, 1000));
 	await fs.writeFile(inputPath.replace(/.wasm$/i, ".js"), botCode);
 	await delay;
 	closed = true;
-	server.close();
+	await new Promise(resolve => server.close(resolve));
+	if (updates == 0) {
+		server.listen(8194);
+		exec(`start chrome /new-window https://yare.io/set_code`);
+		await Promise.any([downloadedPromise, new Promise(resolve => setTimeout(resolve, 5000))]);
+	}
+	await new Promise(resolve => server.close(resolve));
 })();
 
 
