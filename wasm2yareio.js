@@ -3,6 +3,7 @@ const http = require("http");
 const { exec } = require("child_process");
 const fs = require('fs').promises;
 const minify = require('minify');
+const { memory } = require("console");
 
 
 const inputPath = process.argv[2];
@@ -53,7 +54,9 @@ const delay = new Promise(resolve => setTimeout(resolve, 1000));
 function bot() {
 	memory.spirits = Object.values(spirits);
 	memory.bases = [ base, enemy_base ];
-	memory.stars = [ star_zxq, star_a1c ];
+	memory.stars = stars;
+	memory.outposts = [ outpost ];
+	memory.players = Object.values(players);
 	memory.player_id = this_player_id;
 	memory.tick = (memory.tick + 1) || 0;
 
@@ -88,10 +91,12 @@ function bot() {
 				energyCapacity: (index) => memory.spirits[index].energy_capacity,
 				energy: (index) => memory.spirits[index].energy,
 				id: (index) => parseInt(memory.spirits[index].id.match(/_(\d)+$/)[1]) - 1,
+				player_id: (index) => memory.players.indexOf(memory.spirits[index].player_id),
 				hp: (index) => memory.spirits[index].hp,
 
 				energize: (fromIndex, toIndex) => memory.spirits[fromIndex].energize(memory.spirits[toIndex]),
 				energizeBase: (index, baseIndex) => memory.spirits[index].energize(memory.bases[baseIndex]),
+				energizeOutpost: (index, outpostIndex) => memory.spirits[index].energize(memory.outposts[outpostIndex]),
 				move: (index, x, y) => memory.spirits[index].move([x, y]),
 				merge: (fromIndex, toIndex) => memory.spirits[fromIndex].merge(memory.spirits[toIndex]),
 				divide: (index) => memory.spirits[index].divide(),
@@ -109,16 +114,33 @@ function bot() {
 				energy: (index) => memory.bases[index].energy,
 				currentSpiritCost: (index) => memory.bases[index].current_spirit_cost,
 				hp: (index) => memory.bases[index].hp,
+				player_id: (index) => memory.players.indexOf(memory.bases[index].player_id),
 			},
 			stars: {
 				count: () => memory.stars.length,
 				positionX: (index) => memory.stars[index].position[0],
 				positionY: (index) => memory.stars[index].position[1],
 				position: (index) => [ memory.stars[index].position[0], memory.stars[index].position[1] ],
+				energyCapacity: (index) => memory.stars[index].energy_capacity,
+				energy: (index) => memory.stars[index].energy,
+			},
+			outposts: {
+				count: () => memory.outposts.length,
+				positionX: (index) => memory.outposts[index].position[0],
+				positionY: (index) => memory.outposts[index].position[1],
+				position: (index) => [ memory.outposts[index].position[0], memory.outposts[index].position[1] ],
+				size: (index) => memory.outposts[index].size,
+				energyCapacity: (index) => memory.outposts[index].energy_capacity,
+				energy: (index) => memory.outposts[index].energy,
+				range: (index) => memory.outposts[index].range,
+				player_id: (index) => memory.players.indexOf(memory.outposts[index].player_id),
+			},
+			players: {
+				count: () => memory.players.length,
 			},
 			console: {
 				log: (strPtr) => console.log(ptrToString(strPtr)),
-			}
+			},
 		};
 
 		const wasm = new WebAssembly.Module(arr);
