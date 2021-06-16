@@ -91,7 +91,7 @@ function bot() {
 				energyCapacity: (index) => memory.spirits[index].energy_capacity,
 				energy: (index) => memory.spirits[index].energy,
 				id: (index) => parseInt(memory.spirits[index].id.match(/_(\d)+$/)[1]) - 1,
-				player_id: (index) => memory.players.indexOf(memory.spirits[index].player_id),
+				playerId: (index) => memory.players.indexOf(memory.spirits[index].player_id),
 				hp: (index) => memory.spirits[index].hp,
 
 				energize: (fromIndex, toIndex) => memory.spirits[fromIndex].energize(memory.spirits[toIndex]),
@@ -114,7 +114,7 @@ function bot() {
 				energy: (index) => memory.bases[index].energy,
 				currentSpiritCost: (index) => memory.bases[index].current_spirit_cost,
 				hp: (index) => memory.bases[index].hp,
-				player_id: (index) => memory.players.indexOf(memory.bases[index].player_id),
+				playerId: (index) => memory.players.indexOf(memory.bases[index].player_id),
 			},
 			stars: {
 				count: () => memory.stars.length,
@@ -133,7 +133,7 @@ function bot() {
 				energyCapacity: (index) => memory.outposts[index].energy_capacity,
 				energy: (index) => memory.outposts[index].energy,
 				range: (index) => memory.outposts[index].range,
-				player_id: (index) => memory.players.indexOf(memory.outposts[index].player_id),
+				playerId: (index) => memory.players.indexOf(memory.outposts[index].player_id),
 			},
 			players: {
 				count: () => memory.players.length,
