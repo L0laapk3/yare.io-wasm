@@ -54,7 +54,7 @@ const delay = new Promise(resolve => setTimeout(resolve, 1000));
 function bot() {
 	memory.spirits = Object.values(spirits);
 	memory.bases = [ base, enemy_base ];
-	memory.stars = stars;
+	memory.stars = Object.values(stars);
 	memory.outposts = [ outpost ];
 	memory.players = Object.values(players);
 	memory.player_id = this_player_id;
