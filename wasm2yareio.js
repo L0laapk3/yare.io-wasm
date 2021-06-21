@@ -58,7 +58,6 @@ function bot() {
 	memory.outposts = [ outpost ];
 	memory.players = Object.values(players);
 	memory.player_id = this_player_id;
-	memory.tick = (memory.tick + 1) || 0;
 
 	if (memory.wasm_cache != "__UNIQUE__") {
 		const startCompile = new Date().getTime();
@@ -148,5 +147,5 @@ function bot() {
 		console.log(`compiled new wasm script in ${new Date().getTime() - startCompile}ms`);
 	}
 
-	memory.wasm_tick(memory.tick);
+	memory.wasm_tick(tick);
 }
