@@ -82,7 +82,6 @@ function bot() {
 		importObject = {
 			spirits: {
 				count: () => memory.spirits.length,
-				isFriendly: (index) => memory.spirits[index].player_id == memory.player_id,
 				positionX: (index) => memory.spirits[index].position[0],
 				positionY: (index) => memory.spirits[index].position[1],
 				position: (index) => [ memory.sprites[index].position[0], memory.spirits[index].position[1] ],
@@ -102,14 +101,12 @@ function bot() {
 				divide: (index) => memory.spirits[index].divide(),
 				jump: (index, x, y) => memory.spirits[index].jump([x, y]),
 				shout: (index, strPtr) => {memory.spirits[index].shout(ptrToString(strPtr))},
-				// set_mark: (index, strPtr) => {memory.spirits[index].set_mark(ptrToString(strPtr))}, // this function is useless lol
 			},
 			bases: {
 				count: () => memory.bases.length,
 				positionX: (index) => memory.bases[index].position[0],
 				positionY: (index) => memory.bases[index].position[1],
 				position: (index) => [ memory.bases[index].position[0], memory.bases[index].position[1] ],
-				size: (index) => memory.bases[index].size,
 				energyCapacity: (index) => memory.bases[index].energy_capacity,
 				energy: (index) => memory.bases[index].energy,
 				currentSpiritCost: (index) => memory.bases[index].current_spirit_cost,
@@ -129,7 +126,6 @@ function bot() {
 				positionX: (index) => memory.outposts[index].position[0],
 				positionY: (index) => memory.outposts[index].position[1],
 				position: (index) => [ memory.outposts[index].position[0], memory.outposts[index].position[1] ],
-				size: (index) => memory.outposts[index].size,
 				energyCapacity: (index) => memory.outposts[index].energy_capacity,
 				energy: (index) => memory.outposts[index].energy,
 				range: (index) => memory.outposts[index].range,
