@@ -129,7 +129,7 @@ function bot() {
 				energyCapacity: (index) => memory.outposts[index].energy_capacity,
 				energy: (index) => memory.outposts[index].energy,
 				range: (index) => memory.outposts[index].range,
-				playerId: (index) => memory.players.indexOf(memory.outposts[index].player_id),
+				controlledBy: (index) => memory.players.indexOf(memory.outposts[index].control),
 			},
 			players: {
 				count: () => memory.players.length,
