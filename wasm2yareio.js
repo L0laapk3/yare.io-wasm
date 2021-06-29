@@ -137,6 +137,11 @@ function bot() {
 			console: {
 				log: (strPtr) => console.log(ptrToString(strPtr)),
 			},
+			graphics: {
+				color: (r, g, b) => graphics.style = `rgb(${r},${g},${b})`,
+				circle: (x, y, r) => graphics.circle([x, y], r),
+				line: (x1, y1, x2, y2) => graphics.line([x1, y1], [x2, y2]),
+			}
 		};
 
 		const wasm = new WebAssembly.Module(arr);
