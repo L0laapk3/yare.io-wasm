@@ -138,7 +138,7 @@ function bot() {
 				log: (strPtr) => console.log(ptrToString(strPtr)),
 			},
 			graphics: {
-				color: (r, g, b) => graphics.style = `rgb(${r},${g},${b})`,
+				color: (r, g, b, a) => graphics.style = `rgba(${r},${g},${b},${a})`,
 				circle: (x, y, r) => graphics.circle([x, y], r),
 				line: (x1, y1, x2, y2) => graphics.line([x1, y1], [x2, y2]),
 			}
