@@ -7,6 +7,8 @@ const { memory } = require("console");
 
 
 const inputPath = process.argv[2];
+const autoUpdateCode = !process.argv.slice(3).includes("--no-auto-update");
+
 const gen = new Promise(async resolve => {
 	const contents = await fs.readFile(inputPath, {encoding: 'base64'});
 	const unique = new Date().getTime();
@@ -22,22 +24,25 @@ let updates = 0;
 let closed = false;
 let server;
 const downloadedPromise = new Promise(resolve => {
-	server = http.createServer(async (req, res) => {
-		if (!updates++)
-			resolve();
-		res.setHeader("Access-Control-Allow-Origin", "*");
-		res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-		res.setHeader("Connection", "close");
-		const botCode = await gen;
-		res.write(botCode);
-		res.end();
-	}).listen(8194);
+	if (autoUpdateCode)
+		server = http.createServer(async (req, res) => {
+			if (!updates++)
+				resolve();
+			res.setHeader("Access-Control-Allow-Origin", "*");
+			res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+			res.setHeader("Connection", "close");
+			const botCode = await gen;
+			res.write(botCode);
+			res.end();
+		}).listen(8194);
 });
 
 const delay = new Promise(resolve => setTimeout(resolve, 1000));
 (async function() {
 	const botCode = await gen;
 	await fs.writeFile(inputPath.replace(/.wasm$/i, ".js"), botCode);
+	if (!autoUpdateCode)
+		return;
 	await delay;
 	closed = true;
 	await new Promise(resolve => server.close(resolve));
