@@ -96,7 +96,7 @@ function bot() {
 				energy: (index) => memory.spirits[index].energy,
 				id: (index) => spiritId(memory.spirits[index]),
 				number: (index) => spiritNumber(memory.spirits[index]),
-				playerId: (index) => spiritPlayerId(memory.spirit[index]),
+				playerId: (index) => spiritPlayerId(memory.spirits[index]),
 				hp: (index) => memory.spirits[index].hp,
 				lastEnergizedId: (index) => memory.spirits[index].last_energized && spiritId(global[memory.spirits[index].last_energized]),
 				lastEnergizedNumber: (index) => memory.spirits[index].last_energized && spiritNumber(global[memory.spirits[index].last_energized]),
