@@ -82,6 +82,8 @@ function bot() {
 		const spiritPlayerId = s => memory.players.indexOf(s.player_id);
 		const spiritId = s => [ spiritPlayerId(s), spiritNumber(s) ];
 
+		const SHAPES = ["circles", "squares", "triangles"];
+
 		importObject = {
 			spirits: {
 				count: () => memory.spirits.length,
@@ -89,7 +91,7 @@ function bot() {
 				positionY: (index) => memory.spirits[index].position[1],
 				position: (index) => [ memory.sprites[index].position[0], memory.spirits[index].position[1] ],
 				size: (index) => memory.spirits[index].size,
-				shape: (index) => memory.spirits[index].shape == "squares" ? 1 : 0,
+				shape: (index) => SHAPES.indexOf(memory.spirits[index].shape),
 				energyCapacity: (index) => memory.spirits[index].energy_capacity,
 				energy: (index) => memory.spirits[index].energy,
 				id: (index) => spiritId(memory.spirits[index]),
@@ -107,6 +109,7 @@ function bot() {
 				merge: (fromIndex, toIndex) => memory.spirits[fromIndex].merge(memory.spirits[toIndex]),
 				divide: (index) => memory.spirits[index].divide(),
 				jump: (index, x, y) => memory.spirits[index].jump([x, y]),
+				explode: (index) => memory.spirits[index].explode(),
 				shout: (index, strPtr) => {memory.spirits[index].shout(ptrToString(strPtr))},
 			},
 			bases: {
