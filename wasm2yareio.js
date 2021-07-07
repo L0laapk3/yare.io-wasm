@@ -66,11 +66,6 @@ function bot() {
 
 	if (memory.wasm_cache != "__UNIQUE__") {
 		const startCompile = new Date().getTime();
-		buff = Buffer.from("__CONTENTS__", "base64");
-		
-		arr = new Uint8Array(buff.length);
-		for (let i = 0; i < buff.length; ++i)
-			arr[i] = buff[i];
 
 		const ptrToString = ptr => {
 			const buffer = new Uint8Array(memory.wasm_memory.buffer, ptr);
@@ -149,7 +144,8 @@ function bot() {
 			}
 		};
 
-		const wasm = new WebAssembly.Module(arr);
+		const bin = atob("__CONTENTS__");
+		const wasm = new WebAssembly.Module(bin);
 		const inst = new WebAssembly.Instance(wasm, importObject);
 		memory.wasm_tick = inst.exports.tick;
 		memory.wasm_memory = inst.exports.memory;
