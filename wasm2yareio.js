@@ -63,6 +63,7 @@ function bot() {
 	memory.outposts = [ outpost ];
 	memory.players = Object.values(players);
 	memory.player_id = this_player_id;
+	memory.global = globalThis;
 
 	if (memory.wasm_cache != "__UNIQUE__") {
 		const startCompile = new Date().getTime();
@@ -77,6 +78,9 @@ function bot() {
 				str += String.fromCharCode(ch);
 			}
 		};
+		const spiritNumber = s => parseInt(s.id.match(/_(\d)+$/)[1]) - 1;
+		const spiritPlayerId = s => memory.players.indexOf(s.player_id);
+		const spiritId = s => [ spiritPlayerId(s), spiritNumber(s) ];
 
 		importObject = {
 			spirits: {
@@ -88,9 +92,13 @@ function bot() {
 				shape: (index) => memory.spirits[index].shape == "squares" ? 1 : 0,
 				energyCapacity: (index) => memory.spirits[index].energy_capacity,
 				energy: (index) => memory.spirits[index].energy,
-				id: (index) => parseInt(memory.spirits[index].id.match(/_(\d)+$/)[1]) - 1,
-				playerId: (index) => memory.players.indexOf(memory.spirits[index].player_id),
+				id: (index) => spiritId(memory.spirits[index]),
+				number: (index) => spiritNumber(memory.spirits[index]),
+				playerId: (index) => spiritPlayerId(memory.spirit[index]),
 				hp: (index) => memory.spirits[index].hp,
+				lastEnergizedId: (index) => memory.spirits[index].last_energized && spiritId(global[memory.spirits[index].last_energized]),
+				lastEnergizedNumber: (index) => memory.spirits[index].last_energized && spiritNumber(global[memory.spirits[index].last_energized]),
+				lastEnergizedPlayerId: (index) => memory.spirits[index].last_energized && spiritPlayerId(global[memory.spirits[index].last_energized]),
 
 				energize: (fromIndex, toIndex) => memory.spirits[fromIndex].energize(memory.spirits[toIndex]),
 				energizeBase: (index, baseIndex) => memory.spirits[index].energize(memory.bases[baseIndex]),
