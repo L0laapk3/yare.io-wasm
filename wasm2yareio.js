@@ -119,6 +119,7 @@ function bot() {
 				position: (index) => [ memory.stars[index].position[0], memory.stars[index].position[1] ],
 				energyCapacity: (index) => memory.stars[index].energy_capacity,
 				energy: (index) => memory.stars[index].energy,
+				activeAt: (index) => memory.stars[index].active_at,
 			},
 			outposts: {
 				count: () => memory.outposts.length,
