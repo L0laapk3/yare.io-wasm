@@ -89,7 +89,7 @@ function bot() {
 				count: () => memory.spirits.length,
 				positionX: (index) => memory.spirits[index].position[0],
 				positionY: (index) => memory.spirits[index].position[1],
-				position: (index) => [ memory.sprites[index].position[0], memory.spirits[index].position[1] ],
+				position: (index) => [ memory.spirits[index].position[0], memory.spirits[index].position[1] ],
 				size: (index) => memory.spirits[index].size,
 				shape: (index) => SHAPES.indexOf(memory.spirits[index].shape),
 				energyCapacity: (index) => memory.spirits[index].energy_capacity,
