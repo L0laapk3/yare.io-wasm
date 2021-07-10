@@ -151,8 +151,10 @@ function bot() {
 			},
 			graphics: {
 				color: (r, g, b, a) => graphics.style = `rgba(${r},${g},${b},${a})`,
+				linewidth: (w) => graphics.linewidth = w,
 				circle: (x, y, r) => graphics.circle([x, y], r),
 				line: (x1, y1, x2, y2) => graphics.line([x1, y1], [x2, y2]),
+				square: (x1, y1, x2, y2) => graphics.square([x1, y1], [x2, y2]),
 			},
 			random: {
 				random: () => Math.random(),
