@@ -154,7 +154,7 @@ function bot() {
 				lineWidth: (w) => graphics.linewidth = w,
 				circle: (x, y, r) => graphics.circle([x, y], r),
 				line: (x1, y1, x2, y2) => graphics.line([x1, y1], [x2, y2]),
-				rectangle: (x1, y1, x2, y2) => graphics.rect([x1, y1], [x2, y2]),
+				rectangle: (x1, y1, w, h) => graphics.rect([x1, y1], [w, h]),
 			},
 			random: {
 				random: () => Math.random(),
