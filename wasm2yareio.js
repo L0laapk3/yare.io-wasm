@@ -78,7 +78,7 @@ function bot() {
 				str += String.fromCharCode(ch);
 			}
 		};
-		const spiritNumber = s => parseInt(s.id.match(/_(\d)+$/)[1]) - 1;
+		const spiritNumber = s => parseInt(s.id.match(/_(\d+)$/)[1]) - 1;
 		const spiritPlayerId = s => memory.players.indexOf(s.player_id);
 		const spiritId = s => [ spiritPlayerId(s), spiritNumber(s) ];
 
