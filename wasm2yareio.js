@@ -4,6 +4,7 @@ const { exec } = require("child_process");
 const fs = require('fs').promises;
 const minify = require('minify');
 const { memory } = require("console");
+const path = require("path");
 
 
 const inputPath = process.argv[2];
@@ -13,6 +14,8 @@ const gen = new Promise(async resolve => {
 	const contents = await fs.readFile(inputPath, {encoding: 'base64'});
 	const unique = new Date().getTime();
 	let botCode = bot.toString().replace(/function bot\(\) \{([\s\S]+)\}/, '$1').replace(/__UNIQUE__/g, unique).replace(/__CONTENTS__/g, contents);
+	const textEncoderPolyfill = await fs.readFile(path.resolve(__dirname, 'TextEncoderPolyfill.min.js'));
+	botCode = textEncoderPolyfill + botCode;
 	botCode = await minify.js(botCode);
 	botCode = `startTime=new Date().getTime()\n${botCode}\nconsole.log(\`\${new Date().getTime()-startTime}ms\`)`;
 	resolve(botCode)
@@ -77,6 +80,16 @@ function bot() {
 					return decodeURIComponent(escape(str));
 				str += String.fromCharCode(ch);
 			}
+		};
+		const textEncoder = new TextEncoder();
+		const stringToWASM = str => {
+			const bytes = textEncoder.encode(str);
+			const buf = new Uint8Array(bytes.length + 1);
+			buf.set(bytes);
+			buf.set([0], bytes.length);
+			const ptr = memory.wasm_alloc(buf.length);
+			new Uint8Array(memory.wasm_memory.buffer).set(buf, ptr);
+			return ptr;
 		};
 		const spiritNumber = s => parseInt(s.id.match(/_(\d+)$/)[1]) - 1;
 		const spiritPlayerId = s => memory.players.indexOf(s.player_id);
@@ -167,6 +180,7 @@ function bot() {
 		memory.wasm_tick = inst.exports.tick;
 		memory.wasm_memory = inst.exports.memory;
 		memory.wasm_cache = "__UNIQUE__";
+		memory.wasm_alloc = inst.exports.alloc;
 		console.log(`compiled new wasm script in ${new Date().getTime() - startCompile}ms`);
 	}
 
