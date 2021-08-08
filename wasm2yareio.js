@@ -82,6 +82,7 @@ function bot() {
 			}
 		};
 		const textEncoder = new TextEncoder();
+		// `str` must not contain any `\0` characters.
 		const stringToWASM = str => {
 			const bytes = textEncoder.encode(str);
 			const buf = new Uint8Array(bytes.length + 1);
