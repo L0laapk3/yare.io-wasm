@@ -65,6 +65,9 @@ function bot() {
 	memory.player_id = this_player_id;
 	memory.global = globalThis;
 
+	if (!memory.wasm_memory)
+		memory.wasm_memory = new WebAssembly.Memory({ initial: 10 });
+	
 	if (memory.wasm_cache != "__UNIQUE__") {
 		const startCompile = new Date().getTime();
 
@@ -85,6 +88,7 @@ function bot() {
 		const SHAPES = ["circles", "squares", "triangles"];
 
 		importObject = {
+			env: { memory: memory.wasm_memory },
 			spirits: {
 				count: () => memory.spirits.length,
 				positionX: (index) => memory.spirits[index].position[0],
@@ -164,11 +168,11 @@ function bot() {
 		const bin = atob("__CONTENTS__");
 		const wasm = new WebAssembly.Module(bin);
 		const inst = new WebAssembly.Instance(wasm, importObject);
-		memory.wasm_tick = inst.exports.tick;
-		memory.wasm_memory = inst.exports.memory;
+		memory.wasm_tick_fn = inst.exports.tick;
 		memory.wasm_cache = "__UNIQUE__";
 		console.log(`compiled new wasm script in ${new Date().getTime() - startCompile}ms`);
 	}
 
-	memory.wasm_tick(tick);
+	memory.wasm_tick_fn(tick, !memory.wasm_initialized);
+	memory.wasm_initialized = true;
 }
