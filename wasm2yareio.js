@@ -109,6 +109,7 @@ function bot() {
 				energize: (fromIndex, toIndex) => memory.spirits[fromIndex].energize(memory.spirits[toIndex]),
 				energizeBase: (index, baseIndex) => memory.spirits[index].energize(memory.bases[baseIndex]),
 				energizeOutpost: (index, outpostIndex) => memory.spirits[index].energize(memory.outposts[outpostIndex]),
+				energizeStar: (index, starIndex) => memory.spirits[index].energize(memory.stars[starIndex]),
 				move: (index, x, y) => memory.spirits[index].move([x, y]),
 				merge: (fromIndex, toIndex) => memory.spirits[fromIndex].merge(memory.spirits[toIndex]),
 				divide: (index) => memory.spirits[index].divide(),
