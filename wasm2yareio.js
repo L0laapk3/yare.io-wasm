@@ -81,6 +81,16 @@ function bot() {
 				str += String.fromCharCode(ch);
 			}
 		};
+		const StringToPtr = str => {
+			str = unescape(encodeURIComponent(str));
+			const ptr = memory.wasm_alloc_fn(str.length + 1);
+			const buffer = new Uint8Array(memory.wasm_memory.buffer, ptr, str.length + 1);
+			for (let i = 0; i < str.length; i++)
+				buffer[i] = str.charCodeAt(i);
+			buffer[str.length] = 0;
+			return ptr;
+		};
+
 		const spiritNumber = s => parseInt(s.id.match(/_(\d+)$/)[1]) - 1;
 		const spiritPlayerId = s => memory.players.indexOf(s.player_id);
 		const spiritId = s => [ spiritPlayerId(s), spiritNumber(s) ];
@@ -182,6 +192,7 @@ function bot() {
 		}
 		memory.wasm_tick_fn = inst.exports.tick;
 		memory.wasm_cache = "__UNIQUE__";
+		memory.wasm_alloc_fn = inst.exports.alloc;
 		console.log(`compiled new wasm script in ${new Date().getTime() - startCompile}ms`);
 	}
 
