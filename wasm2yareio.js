@@ -66,7 +66,7 @@ function bot() {
 	memory.global = globalThis;
 
 	if (!memory.wasm_memory)
-		memory.wasm_memory = new WebAssembly.Memory({ initial: 10 });
+		memory.wasm_memory = new WebAssembly.Memory({ initial: 0 });
 	
 	if (memory.wasm_cache != "__UNIQUE__") {
 		const startCompile = new Date().getTime();
@@ -168,7 +168,18 @@ function bot() {
 
 		const bin = atob("__CONTENTS__");
 		const wasm = new WebAssembly.Module(bin);
-		const inst = new WebAssembly.Instance(wasm, importObject);
+		let inst;
+		try {
+			inst = new WebAssembly.Instance(wasm, importObject);
+		} catch (e) {
+			if (!(e instanceof WebAssembly.LinkError))
+				throw e;
+			const match = /^WebAssembly\.Instance\(\): memory import 0 is smaller than initial (\d+), got (\d+)$/mgi.exec(e.message);
+			if (!match)
+				throw e;
+			memory.wasm_memory.grow(parseInt(match[1]) - parseInt(match[2]));
+			inst = new WebAssembly.Instance(wasm, importObject);
+		}
 		memory.wasm_tick_fn = inst.exports.tick;
 		memory.wasm_cache = "__UNIQUE__";
 		console.log(`compiled new wasm script in ${new Date().getTime() - startCompile}ms`);
