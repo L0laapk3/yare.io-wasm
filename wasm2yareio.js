@@ -132,7 +132,7 @@ function bot() {
 				energy: (index) => memory.bases[index].energy,
 				currentSpiritCost: (index) => memory.bases[index].current_spirit_cost,
 				hp: (index) => memory.bases[index].hp,
-				playerId: (index) => memory.players.indexOf(memory.bases[index].player_id),
+				controlledBy: (index) => memory.players.indexOf(memory.bases[index].control),
 			},
 			stars: {
 				count: () => memory.stars.length,
