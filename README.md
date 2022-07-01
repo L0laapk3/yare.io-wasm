@@ -4,6 +4,8 @@ A tool to convert webassembly files into runnable bot scripts for https://yare.i
 
 Install the tampermonkey script to auto update the code: [Click to install](https://raw.githubusercontent.com/L0laapk3/yare.io-wasm/master/codeUpdate.user.js).  
 
+requirements: `npm install minify@7`
+
 status: fully working :)
 
 example usage: `node wasm2yareio examples/simple.wasm`  
