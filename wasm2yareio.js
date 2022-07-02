@@ -61,6 +61,7 @@ function bot() {
 	memory.bases = Object.values(bases);
 	memory.stars = Object.values(stars);
 	memory.outposts = Object.values(outposts);
+	memory.pylons = Object.values(pylons);
 	memory.players = Object.values(players);
 	memory.player_id = this_player_id;
 	memory.global = globalThis;
@@ -116,6 +117,7 @@ function bot() {
 				energize: (fromIndex, toIndex) => memory.spirits[fromIndex].energize(memory.spirits[toIndex]),
 				energizeBase: (index, baseIndex) => memory.spirits[index].energize(memory.bases[baseIndex]),
 				energizeOutpost: (index, outpostIndex) => memory.spirits[index].energize(memory.outposts[outpostIndex]),
+				energizePylon: (index, pylonIndex) => memory.spirits[index].energize(memory.pylons[pylonIndex]),
 				energizeStar: (index, starIndex) => memory.spirits[index].energize(memory.stars[starIndex]),
 				move: (index, x, y) => memory.spirits[index].move([x, y]),
 				merge: (fromIndex, toIndex) => memory.spirits[fromIndex].merge(memory.spirits[toIndex]),
@@ -157,6 +159,16 @@ function bot() {
 				energy: (index) => memory.outposts[index].energy,
 				range: (index) => memory.outposts[index].range,
 				controlledBy: (index) => memory.players.indexOf(memory.outposts[index].control),
+			},
+			pylons: {
+				count: () => memory.pylons.length,
+				nameAlloc: (index) => strToPtr(memory.pylons[index].id),
+				positionX: (index) => memory.pylons[index].position[0],
+				positionY: (index) => memory.pylons[index].position[1],
+				position: (index) => [ memory.pylons[index].position[0], memory.pylons[index].position[1] ],
+				energyCapacity: (index) => memory.pylons[index].energy_capacity,
+				energy: (index) => memory.pylons[index].energy,
+				controlledBy: (index) => memory.players.indexOf(memory.pylons[index].control),
 			},
 			players: {
 				count: () => memory.players.length,
