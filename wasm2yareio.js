@@ -192,7 +192,9 @@ function bot() {
 				},
 			};
 
-			const bin = atob("__CONTENTS__");
+			let bin = atob("__CONTENTS__");
+			if (bin[0]["charCodeAt"])	// hack to detect if we're in a browser
+				bin = Uint8Array.from(bin, c => c.charCodeAt(0));
 			const wasm = new WebAssembly.Module(bin);
 			const inst = new WebAssembly.Instance(wasm, importObject);
 			memory.wasm_memory = inst.exports.memory;
@@ -201,7 +203,7 @@ function bot() {
 			memory.wasm_alloc_fn = inst.exports.alloc;
 			console.log(`compiled new wasm script in ${new Date().getTime() - startCompile}ms`);
 		} catch (e) {
-			console.error(e);
+			console.log(e);
 		}
 	}
 
