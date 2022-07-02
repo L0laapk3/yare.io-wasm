@@ -68,7 +68,7 @@ function bot() {
 	if (memory.wasm_cache != "__UNIQUE__") {
 		const startCompile = new Date().getTime();
 
-		const ptrToString = ptr => {
+		const ptrToStr = ptr => {
 			const buffer = new Uint8Array(memory.wasm_memory.buffer, ptr);
 			let str = "", offset = 0;
 			while(true) {
@@ -78,9 +78,9 @@ function bot() {
 				str += String.fromCharCode(ch);
 			}
 		};
-		const StringToPtr = str => {
+		const strToPtr = str => {
 			str = unescape(encodeURIComponent(str));
-			const ptr = memory.wasm_alloc_fn(str.length + 1);
+			const ptr = memory.wasm_alloc_fn(str.length + 1); // wasm is also expected to deallocate the pointer when done with the string
 			const buffer = new Uint8Array(memory.wasm_memory.buffer, ptr, str.length + 1);
 			for (let i = 0; i < str.length; i++)
 				buffer[i] = str.charCodeAt(i);
@@ -97,6 +97,7 @@ function bot() {
 		importObject = {
 			spirits: {
 				count: () => memory.spirits.length,
+				nameAlloc: (index) => strToPtr(memory.spirits[index].id), // wasm side is responsible for deallocating!
 				positionX: (index) => memory.spirits[index].position[0],
 				positionY: (index) => memory.spirits[index].position[1],
 				position: (index) => [ memory.spirits[index].position[0], memory.spirits[index].position[1] ],
@@ -121,10 +122,11 @@ function bot() {
 				divide: (index) => memory.spirits[index].divide(),
 				jump: (index, x, y) => memory.spirits[index].jump([x, y]),
 				explode: (index) => memory.spirits[index].explode(),
-				shout: (index, strPtr) => {memory.spirits[index].shout(ptrToString(strPtr))},
+				shout: (index, strPtr) => {memory.spirits[index].shout(ptrToStr(strPtr))},
 			},
 			bases: {
 				count: () => memory.bases.length,
+				nameAlloc: (index) => strToPtr(memory.bases[index].id), // wasm side is responsible for deallocating!
 				positionX: (index) => memory.bases[index].position[0],
 				positionY: (index) => memory.bases[index].position[1],
 				position: (index) => [ memory.bases[index].position[0], memory.bases[index].position[1] ],
@@ -135,6 +137,7 @@ function bot() {
 			},
 			stars: {
 				count: () => memory.stars.length,
+				nameAlloc: (index) => strToPtr(memory.stars[index].id), // wasm side is responsible for deallocating!
 				positionX: (index) => memory.stars[index].position[0],
 				positionY: (index) => memory.stars[index].position[1],
 				position: (index) => [ memory.stars[index].position[0], memory.stars[index].position[1] ],
@@ -146,6 +149,7 @@ function bot() {
 			},
 			outposts: {
 				count: () => memory.outposts.length,
+				nameAlloc: (index) => strToPtr(memory.outposts[index].id), // wasm side is responsible for deallocating!
 				positionX: (index) => memory.outposts[index].position[0],
 				positionY: (index) => memory.outposts[index].position[1],
 				position: (index) => [ memory.outposts[index].position[0], memory.outposts[index].position[1] ],
@@ -156,10 +160,11 @@ function bot() {
 			},
 			players: {
 				count: () => memory.players.length,
+				nameAlloc: (index) => strToPtr(memory.players[index].id), // wasm side is responsible for deallocating!
 				me: () => memory.players.indexOf(memory.player_id),
 			},
 			console: {
-				log: (strPtr) => console.log(ptrToString(strPtr)),
+				log: (strPtr) => console.log(ptrToStr(strPtr)),
 			},
 			graphics: {
 				color: (r, g, b, a) => graphics.style = `rgba(${r},${g},${b},${a})`,
