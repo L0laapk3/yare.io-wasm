@@ -13,7 +13,7 @@ const gen = new Promise(async resolve => {
 	const contents = await fs.readFile(inputPath, {encoding: 'base64'});
 	const unique = new Date().getTime();
 	let botCode = bot.toString().replace(/function bot\(\) \{([\s\S]+)\}/, '$1').replace(/__UNIQUE__/g, unique).replace(/__CONTENTS__/g, contents);
-	// botCode = await minify.js(botCode);
+	botCode = await minify.js(botCode);
 	resolve(botCode);
 });
 
