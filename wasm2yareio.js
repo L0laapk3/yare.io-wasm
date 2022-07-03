@@ -95,7 +95,7 @@ function bot() {
 			const spiritPlayerId = s => memory.players.indexOf(s.player_id);
 			const spiritId = s => [ spiritPlayerId(s), spiritNumber(s) ];
 
-			const SHAPES = ["neutral", "circles", "squares", "triangles"];
+			const SHAPES = ["circles", "squares", "triangles"];
 
 			importObject = {
 				spirits: {
