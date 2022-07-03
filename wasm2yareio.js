@@ -95,7 +95,7 @@ function bot() {
 			const spiritPlayerId = s => memory.players.indexOf(s.player_id);
 			const spiritId = s => [ spiritPlayerId(s), spiritNumber(s) ];
 
-			const SHAPES = ["circles", "squares", "triangles"];
+			const SHAPES = ["neutral", "circles", "squares", "triangles"];
 
 			importObject = {
 				spirits: {
@@ -134,10 +134,14 @@ function bot() {
 					positionX: (index) => memory.bases[index].position[0],
 					positionY: (index) => memory.bases[index].position[1],
 					position: (index) => [ memory.bases[index].position[0], memory.bases[index].position[1] ],
+					shape: (index) => SHAPES.indexOf(memory.spirits[index].shape),
 					energyCapacity: (index) => memory.bases[index].energy_capacity,
 					energy: (index) => memory.bases[index].energy,
-					currentSpiritCost: (index) => memory.bases[index].current_spirit_cost,
 					controlledBy: (index) => memory.players.indexOf(memory.bases[index].control),
+					currentSpiritCost: (index) => memory.bases[index].current_spirit_cost,
+					spiritCostCount: (index) => memory.bases[index].spirit_costs.length,
+					spiritCostTreshold: (index, tresholdIndex) => memory.bases[index].spirit_costs[tresholdIndex][0],
+					spiritCostValue: (index, tresholdIndex) => memory.bases[index].spirit_costs[tresholdIndex][1],
 				},
 				stars: {
 					count: () => memory.stars.length,
